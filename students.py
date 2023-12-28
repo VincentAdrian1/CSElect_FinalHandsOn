@@ -50,11 +50,21 @@ def edit(id):
         mysql.connection.commit()
         cur.close()
 
-        return redirect(url_for('index'))
+        return render_template('students_edit.html', students=students)
     else:
         cur.execute("SELECT * FROM students WHERE id = %s", (id,))
         students = cur.fetchone()
         cur.close()
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM students WHERE id = %s", (id,))
+    mysql.connection.commit()
+    cur.close()
+
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
