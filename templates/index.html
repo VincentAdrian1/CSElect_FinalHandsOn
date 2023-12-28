@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Student Number</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Middle Name</th>
@@ -30,6 +31,7 @@
                     <td>{{ student[3] }}</td>
                     <td>{{ student[4] }}</td>
                     <td>{{ student[5] }}</td>
+                    <td>{{ student[6] }}</td>
                     <td>
                         <a href="{{ url_for('edit', id=student[0]) }}">Edit</a>
                         <a href="{{ url_for('delete', id=student[0]) }}">Delete</a>
