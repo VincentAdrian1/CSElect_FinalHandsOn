@@ -29,14 +29,16 @@ def add():
         gender = request.form['gender']
         birthday = request.form['birthday']
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO customers (first_name, last_name, middle_name, gender, email, phone_number, town_city, country) VALUES (%s, %s, %s, %s, %s)", (first_name, last_name, middle_name, gender, birthday))
+        cur.execute("INSERT INTO students (student_number, first_name, last_name, middle_name, gender, birthday) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (student_number, first_name, last_name, middle_name, gender, birthday))
         mysql.connection.commit()
         cur.close()
 
-        return render_template('students_edit.html')
-    
+        return redirect(url_for('index'))
+
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
+    cur = mysql.connection.cursor()
 
     if request.method == 'POST':
         student_number = request.form['student_number']
@@ -45,16 +47,18 @@ def edit(id):
         middle_name = request.form['middle_name']
         gender = request.form['gender']
         birthday = request.form['birthday']
-        cur = mysql.connection.cursor()
-        cur.execute("UPDATE students SET first_name=%s, last_name=%s, middle_name=%s, gender=%s, birthday=%s WHERE id=%s", (first_name, last_name, middle_name, gender, birthday))
+        cur.execute("UPDATE students SET student_number=%s, first_name=%s, last_name=%s, middle_name=%s, gender=%s, birthday=%s WHERE id=%s",
+                    (student_number, first_name, last_name, middle_name, gender, birthday, id))
         mysql.connection.commit()
         cur.close()
 
-        return render_template('students_edit.html', students=students)
+        return redirect(url_for('index'))
     else:
         cur.execute("SELECT * FROM students WHERE id = %s", (id,))
-        students = cur.fetchone()
+        student = cur.fetchone()
         cur.close()
+
+        return render_template('students_edit.html', student=student)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -65,6 +69,5 @@ def delete(id):
 
     return redirect(url_for('index'))
 
-
-if __name__ == '__main__':
+if __name__ == '__name__':
     app.run(debug=True)
