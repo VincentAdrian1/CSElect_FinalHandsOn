@@ -46,7 +46,7 @@ def edit(id):
         gender = request.form['gender']
         birthday = request.form['birthday']
         cur = mysql.connection.cursor()
-        cur.execute("UPDATE students SET first_name=%s, last_name=%s, middle_name=%s, gender=%s, birthday=%s WHERE id=%s", (first_name, last_name, middle_name, gender, birthday, id))
+        cur.execute("UPDATE students SET first_name=%s, last_name=%s, middle_name=%s, gender=%s, birthday=%s WHERE id=%s", (first_name, last_name, middle_name, gender, birthday))
         mysql.connection.commit()
         cur.close()
 
