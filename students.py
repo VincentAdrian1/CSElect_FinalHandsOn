@@ -19,5 +19,42 @@ def index():
 
     return render_template('index.html', students=students)
 
+@app.route('/add', methods=['POST'])
+def add():
+    if request.method == 'POST':
+        student_number = request.form['student_number']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        middle_name = request.form['middle_name']
+        gender = request.form['gender']
+        birthday = request.form['birthday']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO customers (first_name, last_name, middle_name, gender, email, phone_number, town_city, country) VALUES (%s, %s, %s, %s, %s)", (first_name, last_name, middle_name, gender, birthday))
+        mysql.connection.commit()
+        cur.close()
+
+        return render_template('students_edit.html')
+    
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+
+    if request.method == 'POST':
+        student_number = request.form['student_number']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        middle_name = request.form['middle_name']
+        gender = request.form['gender']
+        birthday = request.form['birthday']
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE students SET first_name=%s, last_name=%s, middle_name=%s, gender=%s, birthday=%s WHERE id=%s", (first_name, last_name, middle_name, gender, birthday, id))
+        mysql.connection.commit()
+        cur.close()
+
+        return redirect(url_for('index'))
+    else:
+        cur.execute("SELECT * FROM students WHERE id = %s", (id,))
+        students = cur.fetchone()
+        cur.close()
+
 if __name__ == '__main__':
     app.run(debug=True)
