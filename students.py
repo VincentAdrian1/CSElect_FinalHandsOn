@@ -10,6 +10,14 @@ app.config['MYSQL_DB'] = 'schooldb'
 
 mysql = MySQL(app)
 
+@app.route('/')
+def index():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM students")
+    students = cur.fetchall()
+    cur.close()
+
+    return render_template('index.html', students=students)
 
 if __name__ == '__main__':
     app.run(debug=True)
